@@ -7,3 +7,6 @@ Content-Type: application/json
 	"name": "Matheus de Gondra",
 	"email": "matheus@mail.com"
 }
+###
+
+GET {{base_url}}/invite/matheus
