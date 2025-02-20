@@ -1,5 +1,7 @@
 @base_url = http://localhost:3333
+@subscriber_id = {{subscription.response.body.subscriberId}}
 
+# @name subscription
 POST {{base_url}}/subscriptions
 Content-Type: application/json
 
@@ -9,4 +11,7 @@ Content-Type: application/json
 }
 ###
 
-GET {{base_url}}/invite/matheus
+GET {{base_url}}/invite/{{subscriber_id}} 
+###
+
+GET {{base_url}}/subscribers/{{subscriber_id}}/ranking/clicks

@@ -2,31 +2,31 @@ import type { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { env } from "../env";
 import { accessInviteLink } from "../functions/access-invite-link";
+import { getSubscriberInviteClicks } from "../functions/get-subscriber-invite-clicks";
 
-export const accessInviteLinkRoute: FastifyPluginAsyncZod = async (app) => {
+export const getSubscriberInviteClicksRoute: FastifyPluginAsyncZod = async (app) => {
   app.get(
-    "/invite/:subscriberId",
+    "/subscribers/:subscriberId/ranking/clicks",
     {
       schema: {
-        summary: "Access invite link and redirects user",
+        summary: "Get subscriber invite clicks",
         tags: ["Referral"],
         params: z.object({
           subscriberId: z.string()
         }),
         response: {
-          302: z.null()
+          200: z.object({
+            count: z.number()
+          })
         }
       }
     },
     async (request, reply) => {
       const { subscriberId } = request.params;
 
-      await accessInviteLink({ subscriberId });
+      const { count } = await getSubscriberInviteClicks({ subscriberId });
 
-      const redirectUrl = new URL(env.WEB_URL);
-      redirectUrl.searchParams.set("referrer", subscriberId);
-
-      return reply.redirect(redirectUrl.toString(), 302);
+      return { count };
     }
   );
 };
