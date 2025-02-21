@@ -2,9 +2,10 @@ import { inArray } from "drizzle-orm";
 import { db } from "../drizzle/client";
 import { subscriptions } from "../drizzle/schema/subscriptions";
 import { redis } from "../redis/client";
+import { RedisStorageType } from "../redis/redis-storage-type";
 
 export async function getRanking() {
-  const ranking = await redis.zrevrange("referral:ranking", 0, 2, "WITHSCORES");
+  const ranking = await redis.zrevrange(RedisStorageType.REFERRAL_RANKING, 0, 2, "WITHSCORES");
   const subscriberIdAndScore: Record<string, number> = {};
 
   for (let i = 0; i < ranking.length; i += 2) {

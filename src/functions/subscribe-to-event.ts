@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../drizzle/client";
 import { subscriptions } from "../drizzle/schema/subscriptions";
 import { redis } from "../redis/client";
+import { RedisStorageType } from "../redis/redis-storage-type";
 
 interface SubscribeToEventParams {
   name: string;
@@ -26,7 +27,7 @@ export async function subscribeToEvent({ name, email, referrerId }: SubscribeToE
     .returning();
 
   if (referrerId) {
-    await redis.zincrby("referral:ranking", 1, referrerId);
+    await redis.zincrby(RedisStorageType.REFERRAL_RANKING, 1, referrerId);
   }
 
   return {
